@@ -1,6 +1,7 @@
 ---
 title: "Practice Activity 6"
 format: html
+author: "Stolie Erickson, Mira Shlimenzon, Joseph Konat, Casey Avila"
 self-contained: true
 ---
 
