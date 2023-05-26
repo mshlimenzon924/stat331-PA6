@@ -19,4 +19,14 @@ ipp <- read_csv("cpp.csv")
 Explanation of what we're doing... (stolie)
 
 ```{r}
+
+```
+
+```{r}
+co2_long <- co2 |>
+  mutate(across(`1800`:`2020`, 
+                ~ as.numeric(str_replace(.x, "−", "-")))) |>
+  pivot_longer(cols = `1800`:`2020`,
+               names_to = "Year",
+               values_to = "Emissions")
 ```
