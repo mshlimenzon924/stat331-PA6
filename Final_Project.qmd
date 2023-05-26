@@ -4,3 +4,14 @@ format: html
 author: "Stolie Erickson, Mira Shlimenzon, Joseph Konat, Casey Avila"
 self-contained: true
 ---
+
+```{r setup}
+library(tidyverse)
+
+co2 <- read_csv("co2.csv")
+ipp <- read_csv("cpp.csv")
+```
+
+```{r}
+co2
+```
