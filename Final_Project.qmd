@@ -32,3 +32,12 @@ clean_init_repeats <- function(row) {
 clean_init_repeats(co2[1])
 
 ```
+
+```{r}
+co2_long <- co2 %>%
+  mutate(across(`1800`:`2020`, 
+                ~ as.numeric(str_replace(.x, "−", "-")))) %>%
+  pivot_longer(cols = `1800`:`2020`,
+               names_to = "Year",
+               values_to = "Emissions")
+```
