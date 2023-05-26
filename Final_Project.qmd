@@ -5,6 +5,8 @@ author: "Stolie Erickson, Mira Shlimenzon, Joseph Konat, Casey Avila"
 self-contained: true
 ---
 
+# Title?
+
 ```{r setup}
 library(tidyverse)
 
@@ -12,7 +14,9 @@ co2 <- read_csv("co2.csv")
 ipp <- read_csv("cpp.csv")
 ```
 
+## Data Cleaning
+
+Explanation of what we're doing...
+
 ```{r}
-data1 <- co2 |>
-  full_join(ipp, join_by("country"))
 ```
