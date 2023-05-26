@@ -1,0 +1,6 @@
+---
+title: "Final Project"
+format: html
+author: "Stolie Erickson, Mira Shlimenzon, Joseph Konat, Casey Avila"
+self-contained: true
+---
