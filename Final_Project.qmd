@@ -19,4 +19,16 @@ ipp <- read_csv("cpp.csv")
 Explanation of what we're doing... (stolie)
 
 ```{r}
+clean_init_repeats <- function(row) {
+  previous <- row[1]
+  for (i in 2:length(row)) {
+    if (previous == row[i]) {
+      row[i - 1] <- NA
+    }
+  }
+  return(row)
+}
+  
+clean_init_repeats(co2[1])
+
 ```
