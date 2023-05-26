@@ -13,5 +13,6 @@ ipp <- read_csv("cpp.csv")
 ```
 
 ```{r}
-co2
+data1 <- co2 |>
+  full_join(ipp, join_by("country"))
 ```
