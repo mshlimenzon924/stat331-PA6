@@ -67,3 +67,17 @@ co2_long <- co2 %>%
                names_to = "Year",
                values_to = "Emissions")
 ```
+
+```{r}
+ipp_long <- ipp %>%
+   select(country:`2020`) %>%
+   pivot_longer(cols = `1800`:`2020`,
+               names_to = "Year",
+               values_to = "Average Income Per Capita")
+```
+
+```{r join}
+merged_data <- inner_join(co2_long, ipp_long, by = c("country", "Year"))
+merged_data
+# remove rows with NA??
+```
