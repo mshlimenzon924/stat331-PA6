@@ -100,7 +100,7 @@ co2_long <- co2 %>%
 
 This data set included values from the future (2023 - 2050), which were predicted based
 off of GDP growth rates for a given country. We removed all values after 2020 in
-order to match our CO2 dataset and make joining easy.
+order to match our CO2 dataset and make joining simpler. We also wanted to avoid any predictive modeling that the income dataset may have used in order to obtain values for years that have not already occurred.
 
 ```{r}
 ipp_long <- ipp %>%
@@ -112,6 +112,9 @@ ipp_long <- ipp %>%
 
 ## Joining the Data
 
+While merging our data, we wanted to ensure that both the explanatory and response variables remained grouped by both the country for which the data was collected and the year. This will ensure that if we want to analyze specific countries then we can group by that aspect, similarly with the year. This will allow us to add details to our visualizations, if desired. 
+
+We decided to drop all of the NA values in the merged data set. This is because with regards to correlation and linear regression, it is generally recommended to remove rows with missing values. When there are missing values in either the predictor or the response variables it can create inconsistencies in the data. This could potentially lead to biased or inaccurate results. Although lm and ggplot automatically drop the NA values, if we plan on doing further summary analysis we want to use the data that is demonstrated in our models.
 ```{r join}
 merged_data <- inner_join(co2_long, ipp_long, by = c("country", "year")) %>%
   drop_na()
