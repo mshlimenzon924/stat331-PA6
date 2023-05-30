@@ -98,7 +98,7 @@ co2_long <- co2 %>%
 
 ### Income Dataset
 
-This dataset included values from the future (2023 - 2050), which were predicted based
+This data set included values from the future (2023 - 2050), which were predicted based
 off of GDP growth rates for a given country. We removed all values after 2020 in
 order to match our CO2 dataset and make joining easy.
 
@@ -113,8 +113,6 @@ ipp_long <- ipp %>%
 ## Joining the Data
 
 ```{r join}
-merged_data <- inner_join(co2_long, ipp_long, by = c("country", "year"))
-
-head(merged_data)
-# remove rows with NA??
+merged_data <- inner_join(co2_long, ipp_long, by = c("country", "year")) %>%
+  drop_na()
 ```
