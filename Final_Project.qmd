@@ -32,10 +32,11 @@ ipp <- read_csv("cpp.csv")
 ```
 
 ## Data Cleaning
-Upon initially looking through the CO2 data, we noticed that less economically developed countries in earlier years have repeated emission values for extended periods of time. We believe that it is unreasonable for CO2 emissions per capita to remain exactly the same for 30+ years for several rows. Under the assumption that predictive modeling was used to fill in data which was unknown dating back to 1800, we will be taking steps to clean it. In order to prevent our data from skewing, we are creating a function that will take in each row of the data set, and replace the emission values with NA’s until the emission initially changes. For example, since Australia has an emission value of 0 from 1800 to 1859, then changes in 1860 to .33, our function will sequence through the row and replace all of the 0’s with NA until 1859 (it will keep only the last 0 before the change) then the rest of the row will remain unchanged.
+Upon initially looking through the CO2 data, we noticed that less economically developed countries in earlier years have repeated emission values for extended periods of time. We believe that it is unreasonable for CO2 emissions per capita to remain exactly the same for 30+ years for several rows. Under the assumption that predictive modeling was used to fill in data which was unknown dating back to 1800, we will be taking steps to clean it. In order to prevent our data from skewing, we are creating a function that will take in each row of the data set, and replace the emission values with NA’s until the emission initially changes. For example, since Australia has an emission value of 0 from 1800 to 1859, then changes in 1860 to .33, our function will sequence through the row and replace all of the 0’s with NA until 1859 (it will keep only the last 0 before the change) then the rest of the row will remain unchanged. Additionally, we noticed how the minus signs of the CO2 emissions per capita were not actual minus signs, so we replaced them accordingly. 
 
 
 ```{r}
+# cleaning repetitions
 clean_init_repeats <- function(df) {
   for (i in 1:nrow(df)) {
     row <- df[i,]
@@ -58,6 +59,7 @@ co2 <- co2 %>%
 ```
 
 ```{r}
+# updating minuses and pivoting co2 data
 co2_long <- co2 %>%
   mutate(across(`1800`:`2020`, 
                 ~ as.numeric(str_replace(.x, "−", "-")))) %>%
