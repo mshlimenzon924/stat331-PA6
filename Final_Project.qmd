@@ -1,42 +1,51 @@
 ---
-title: "Final Project"
-format: html
+title: "Final Project Proposal + Data"
 author: "Stolie Erickson, Mira Shlimenzon, Joseph Konat, Casey Avila"
-self-contained: true
+format: 
+  html:
+    self-contained: true
+    code-tools: true
+    toc: true
+    number-sections: true
+editor: source
+execute: 
+  error: true
+  echo: true
+  message: false
+  warning: false
 ---
-
-##Data Description
-
-The two variables that we are interested in are the average daily income per capita (independent variable) and how it is related to CO2 emissions per capita (response variable).
-
-##Income Data
-
-The income dataset contains information regarding each country's average daily household income based on a 2011 survey. These are measured in constant international dollars (PPP), converting the dollars to amounts that equalize the purchasing power across different currencies/regions. There does not appear to be NA values or a number that is replacing missing data, although our data cleaning will reveal more information regarding this. 
-
-## CO2 Data
-
-The CO2 data set describes the consumption based CO2 emissions in million tonnes of CO2 per capita. These values are based on the Global Carbon Project 2021. 
-
-## Hypothesis
-
-We anticipate that more economically developed countries (those with higher average incomes per capita) will be correlated with higher CO2 emissions compared to countries with lower average incomes per capita. 
-
-<https://www.cgdev.org/media/who-caused-climate-change-historically#:~:text=Developed%20Countries%20Are%20Responsible%20for,Global%20Development%20%7C%20Ideas%20to%20Action>
-
 
 ```{r setup}
 library(tidyverse)
 
 co2 <- read_csv("co2.csv")
-ipp <- read_csv("cpp.csv")
+ipp <- read_csv("ipp.csv")
 ```
 
+## Data Description
+
+The two variables that we are interested in are the average daily income per capita (independent variable) and how it is related to CO2 emissions per capita (response variable).
+
+### Income Dataset
+
+The income dataset contains information regarding each country's average daily household income based on a 2011 survey. These are measured in constant international dollars (PPP), converting the dollars to amounts that equalize the purchasing power across different currencies/regions. There does not appear to be NA values or a number that is replacing missing data, although our data cleaning will reveal more information regarding this. 
+On Gapminder, this dataset is titled "Average daily income per capita, PPP (constant 2011 international $)".
+
+### CO2 Dataset
+
+The CO2 data set describes the consumption based CO2 emissions in million tonnes of CO2 per capita. These values are based on the Global Carbon Project 2021. On Gapminder, this dataset is titled "CO2 emissions per capita (Consumption based)".
+
+## Hypothesis
+
+According to some [research](https://www.cgdev.org/media/who-caused-climate-change-historically#:~:text=Developed%20Countries%20Are%20Responsible%20for,Global%20Development%20%7C%20Ideas%20to%20Action), we anticipate that more economically developed countries (those with higher average incomes per capita) will be correlated with higher CO2 emissions compared to countries with lower average incomes per capita.
+
 ## Data Cleaning
+
+### CO2 Dataset
+
 Upon initially looking through the CO2 data, we noticed that less economically developed countries in earlier years have repeated emission values for extended periods of time. We believe that it is unreasonable for CO2 emissions per capita to remain exactly the same for 30+ years for several rows. Under the assumption that predictive modeling was used to fill in data which was unknown dating back to 1800, we will be taking steps to clean it. In order to prevent our data from skewing, we are creating a function that will take in each row of the data set, and replace the emission values with NA’s until the emission initially changes. For example, since Australia has an emission value of 0 from 1800 to 1859, then changes in 1860 to .33, our function will sequence through the row and replace all of the 0’s with NA until 1859 (it will keep only the last 0 before the change) then the rest of the row will remain unchanged. Additionally, we noticed how the minus signs of the CO2 emissions per capita were not actual minus signs, so we replaced them accordingly. 
 
-
 ```{r}
-# cleaning repetitions
 clean_init_repeats <- function(df) {
   for (i in 1:nrow(df)) {
     row <- df[i,]
@@ -56,28 +65,56 @@ clean_init_repeats <- function(df) {
 
 co2 <- co2 %>%
   clean_init_repeats()
+
 ```
 
+### Income Dataset
+
+This dataset suffered from a similar problem to that of the CO2 dataset, so we can
+re-use our cleaning function on `ipp`.
+
 ```{r}
-# updating minuses and pivoting co2 data
+ipp <- ipp %>%
+  clean_init_repeats()
+```
+
+## Final Cleanup and Pivoting
+
+### CO2 Dataset
+
+Our CO2 dataset also included negative values, which were encoded as strings due
+to them using a "−", rather than "-" (note the slight difference). This was fixed
+by replacing the dash with a traditional hyphen so that `as.numeric` could interpret
+the string, and then converting the values.
+
+```{r}
 co2_long <- co2 %>%
   mutate(across(`1800`:`2020`, 
                 ~ as.numeric(str_replace(.x, "−", "-")))) %>%
   pivot_longer(cols = `1800`:`2020`,
-               names_to = "Year",
-               values_to = "Emissions")
+               names_to = "year",
+               values_to = "emissions")
 ```
+
+### Income Dataset
+
+This dataset included values from the future (2023 - 2050), which were predicted based
+off of GDP growth rates for a given country. We removed all values after 2020 in
+order to match our CO2 dataset and make joining easy.
 
 ```{r}
 ipp_long <- ipp %>%
    select(country:`2020`) %>%
    pivot_longer(cols = `1800`:`2020`,
-               names_to = "Year",
-               values_to = "Average Income Per Capita")
+               names_to = "year",
+               values_to = "average_income_per_capita")
 ```
 
+## Joining the Data
+
 ```{r join}
-merged_data <- inner_join(co2_long, ipp_long, by = c("country", "Year"))
-merged_data
+merged_data <- inner_join(co2_long, ipp_long, by = c("country", "year"))
+
+head(merged_data)
 # remove rows with NA??
 ```
