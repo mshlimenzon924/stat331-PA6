@@ -17,7 +17,7 @@ execute:
 
 ```{r setup}
 library(tidyverse)
-
+options(scipen = 999)
 co2 <- read_csv("co2.csv")
 ipp <- read_csv("ipp.csv")
 ```
@@ -119,3 +119,42 @@ We decided to drop all of the NA values in the merged data set. This is because 
 merged_data <- inner_join(co2_long, ipp_long, by = c("country", "year")) %>%
   drop_na()
 ```
+
+##Linear Regression
+
+##Data Visualization
+
+*The relationship between the two variables*
+```{r}
+merged_data |>
+  ggplot(mapping = aes(x = average_income_per_capita, y = emissions)) +
+  geom_point(alpha = 0.3, color = "steelblue") +
+  labs(x = "Average Income Per Capita (PPP)", y = "CO2 Emissions Per Capita (million tonnes)", title = "Relationship between Average Income and CO2 Emissions Per Capita")
+```
+*how this relationship has changed over time*
+*Need help fixing the year axis, maybe make it so the years are every 20-50 years or something?!*
+```{r}
+merged_data |>
+  mutate(year = as.factor(year)) |>
+  ggplot(mapping = aes(x = year, y = average_income_per_capita, color = emissions)) +
+  geom_line() +
+  labs(x = "Year", y = "Average Income Per Capita (PPP)", title = "Relationship between Average Income and CO2 Emissions Per Capita") +
+  scale_color_gradient(low = "blue", high = "red", name = "Emissions (million tonnes)")
+```
+
+##Linear Regression Model
+*this is how the model will look if we use all of the data for the regression. She says we can choose to do this or make it one x and one y value per country so we just need to decide*
+```{r}
+Model <- lm(emissions ~ average_income_per_capita, data = merged_data)
+summary(Model)
+```
+
+```{r}
+#printing out the regression equation
+coef <- coef(Model)
+print(paste("The Regression Equation is: Emissions =", as.character(coef[1]), "+", as.character(coef[2]), "*average_income_per_capita"))
+```
+
+Interpretation of the Intercept: For countries with an average income per capita of 0 constant international dollars, the estimated CO2 emissions per capita is .958. *do we have data points at 0? if not, this is not interpretable*
+
+Interpretation of average_income_per_capita: Each increase in one constant international dollar is associated with an increase of .279 in CO2 emissions per capita for all countries similar to those in the study.
