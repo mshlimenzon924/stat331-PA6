@@ -138,13 +138,13 @@ merged_data |>
   mutate(year = as.factor(year)) |>
   ggplot(mapping = aes(x = year, y = average_income_per_capita, color = emissions)) +
   geom_line() +
-  scale_x_discrete(breaks = merged_data$year[seq(1, length(merged_data$year), by = 20)], labels = merged_data$year[seq(1, length(merged_data$year), by = 20)]) +
+  scale_x_discrete(breaks = unique(merged_data$year)[c(T, rep(FALSE, 35))]) +
   labs(x = "Year", y = "Average Income Per Capita (PPP)", title = "Relationship between Average Income and CO2 Emissions Per Capita") +
   scale_color_gradient(low = "blue", high = "red", name = "Emissions (million tonnes)")
 ```
 
 ##Linear Regression Model
-*this is how the model will look if we use all of the data for the regression. She says we can choose to do this or make it one x and one y value per country so we just need to decide*
+
 ```{r}
 linear_data <- merged_data |>
   filter(year %in% c(1990: 2020)) |>
