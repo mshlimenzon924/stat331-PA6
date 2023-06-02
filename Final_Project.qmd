@@ -165,12 +165,8 @@ Model <- lm(average_emission ~ average_income, data = linear_data)
 summary(Model)
 ```
 
-```{r}
-#printing out the regression equation
-coef <- coef(Model)
-print(paste("The Regression Equation is: Emissions =", as.character(coef[1]), "+", as.character(coef[2]), "*average_income"))
-```
-
+#Regression Equation
+$$Emissions = 0.505 + 0.278averageIncome $$
 Interpretation of the Intercept: For countries with an average income per capita of 0 constant international dollars, the estimated CO2 emissions per capita is .505. *do we have data points at 0? if not, this is not interpretable*
 
 Interpretation of average_income_per_capita: Each increase in one constant international dollar is associated with an increase of .278 in CO2 emissions per capita for all countries similar to those in the study.
