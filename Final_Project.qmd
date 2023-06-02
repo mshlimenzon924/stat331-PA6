@@ -126,15 +126,16 @@ merged_data <- inner_join(co2_long, ipp_long, by = c("country", "year")) %>%
 
 ##Data Visualization
 
-*The relationship between the two variables*
+**The Relationship**
 ```{r}
 merged_data |>
   ggplot(mapping = aes(x = average_income_per_capita, y = emissions)) +
   geom_point(alpha = 0.3, color = "steelblue") +
   labs(x = "Average Income Per Capita (PPP)", y = "CO2 Emissions Per Capita (million tonnes)", title = "Relationship between Average Income and CO2 Emissions Per Capita")
 ```
-*how this relationship has changed over time*
-*Need help fixing the year axis, maybe make it so the years are every 20-50 years or something?!*
+This graph demonstrates the relationship between average income per capita (x) and CO2 emissions per capita (y). From the graph, we can see that the points appear to follow a positive, somewhat linear correlation. Additionally, we assumed that the negative CO2 emission values could potentially be from countries that actually filter more CO2 out of the atmosphere than they emit, for example tree/vegetation dense areas that are able to remove large emission amounts.
+
+**The Relationship Over Time**
 ```{r}
 merged_data |>
   mutate(year = as.factor(year)) |>
@@ -144,9 +145,11 @@ merged_data |>
   labs(x = "Year", y = "Average Income Per Capita (PPP)", title = "Relationship between Average Income and CO2 Emissions Per Capita") +
   scale_color_gradient(low = "blue", high = "red", name = "Emissions (million tonnes)")
 ```
-If you notice the different width of intervals in the x axis for year, it is due to missing values. Ech country has a value for each year theoretically, but if there is a missing one, than the amount of values to plot decreases for that given year, resulting in slightly different widths of the x-axis.
+The varying width of intervals on the x-axis for years is a result of missing values. Each country has an x and y value for each year theoretically, but if there are missing values, which are filtered out, then the amount of values to plot decreases for that given year, resulting in slightly different widths on the x-axis.
 
-Furthermore, as shown above, the relationship between average income per capita vs emissions over time is shown above. There is a definite correlation in an increase in income and emissions. Also, over time, average income per capita has dramatically increased.There is a spike in emissions around the 50's through 70's, this could be due to less regulation and the post-war economy.
+Furthermore, the relationship between average income per capita vs emissions over time is shown above. There appears to be a positive correlation between income and CO2 emissions. Graphically, we can see that countries with lower average incomes per capita (closer to 0) are lower on the emission scale (blue), whereas the higher emissions are correlated with countries with higher incomes (red/pink). Also, over time, average income per capita has dramatically increased overall. There is a spike in emissions around the 50's through 70's, this could be due to less regulation and the post-war economy.
+
+
 ##Linear Regression Model
 
 ```{r}
