@@ -142,7 +142,9 @@ merged_data |>
   labs(x = "Year", y = "Average Income Per Capita (PPP)", title = "Relationship between Average Income and CO2 Emissions Per Capita") +
   scale_color_gradient(low = "blue", high = "red", name = "Emissions (million tonnes)")
 ```
+If you notice the different width of intervals in the x axis for year, it is due to missing values. Ech country has a value for each year theoretically, but if there is a missing one, than the amount of values to plot decreases for that given year, resulting in slightly different widths of the x-axis.
 
+Furthermore, as shown above, the relationship between average income per capita vs emissions over time is shown above. There is a definite correlation in an increase in income and emissions. Also, over time, average income per capita has dramatically increased.There is a spike in emissions around the 50's through 70's, this could be due to less regulation and the post-war economy.
 ##Linear Regression Model
 
 ```{r}
