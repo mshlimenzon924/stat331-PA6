@@ -152,6 +152,8 @@ Furthermore, the relationship between average income per capita vs emissions ove
 
 ##Linear Regression Model
 
+For wrangling our data to use for the linear regression model, we decided to summarize our data so we have one x and y value for each country. However, due to the spike in emissions in more recent years, we decided to take the average from 1990 to 2020. We also considered making several intervals of 30 years to increase our data availability, but will revisit this concept in the future. 
+
 ```{r}
 linear_data <- merged_data |>
   filter(year %in% c(1990: 2020)) |>
@@ -167,9 +169,9 @@ summary(Model)
 
 #Regression Equation 
 $$Emissions = 0.505 + 0.278averageIncome $$
-Interpretation of the Intercept: For countries with an average income per capita of 0 constant international dollars, the estimated CO2 emissions per capita is .505. *do we have data points at 0? if not, this is not interpretable*
+Interpretation of the Intercept: For countries with an average income per capita of 0 constant international dollars, the estimated CO2 emissions per capita is .505 million tonnes.
 
-Interpretation of average_income_per_capita: Each increase in one constant international dollar is associated with an increase of .278 in CO2 emissions per capita for all countries similar to those in the study.
+Interpretation of average_income_per_capita: Each increase in one constant international dollar is associated with an increase of .278 million tonnes in CO2 emissions per capita for all countries similar to those in the study.
 
 ```{r}
 response <- var(merged_data$emissions)
@@ -186,3 +188,5 @@ data.frame(Variance_Type = c("Response Values", "Fitted Values", "Residuals"),
 proportion_variability <- 1 - (residuals / response)
 proportion_variability
 ```
+
+75.73% of the variation in average CO2 emissions is explained by the linear regression model, using average income per capita as the predictor variable.
