@@ -145,6 +145,14 @@ merged_data |>
 ##Linear Regression Model
 *this is how the model will look if we use all of the data for the regression. She says we can choose to do this or make it one x and one y value per country so we just need to decide*
 ```{r}
+linear_data <- merged_data |>
+  filter(year %in% c(1990: 2020)) |>
+  group_by(country) |>
+  summarize(average_emission = mean(emissions), average_income = mean(average_income_per_capita))
+```
+
+
+```{r}
 Model <- lm(emissions ~ average_income_per_capita, data = merged_data)
 summary(Model)
 ```
@@ -158,3 +166,4 @@ print(paste("The Regression Equation is: Emissions =", as.character(coef[1]), "+
 Interpretation of the Intercept: For countries with an average income per capita of 0 constant international dollars, the estimated CO2 emissions per capita is .958. *do we have data points at 0? if not, this is not interpretable*
 
 Interpretation of average_income_per_capita: Each increase in one constant international dollar is associated with an increase of .279 in CO2 emissions per capita for all countries similar to those in the study.
+
