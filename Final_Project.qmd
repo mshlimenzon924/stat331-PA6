@@ -17,6 +17,8 @@ execute:
 
 ```{r setup}
 library(tidyverse)
+library(kableExtra)
+library(knitr)
 options(scipen = 999)
 co2 <- read_csv("co2.csv")
 ipp <- read_csv("ipp.csv")
@@ -170,3 +172,18 @@ Interpretation of the Intercept: For countries with an average income per capita
 
 Interpretation of average_income_per_capita: Each increase in one constant international dollar is associated with an increase of .278 in CO2 emissions per capita for all countries similar to those in the study.
 
+```{r}
+response <- var(merged_data$emissions)
+fitted <- var(fitted(Model))
+residuals <- var(residuals(Model))
+
+
+data.frame(Variance_Type = c("Response Values", "Fitted Values", "Residuals"),
+  Variance = c(response, fitted, residuals)) |>
+  kable(align = "c") |>
+  kable_styling(full_width = FALSE, bootstrap_options = c("hover")) |>
+  row_spec(0, bold = TRUE, background = "#d8e8e1") 
+
+proportion_variability <- 1 - (residuals / response)
+proportion_variability
+```
