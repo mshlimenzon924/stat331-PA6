@@ -19,6 +19,7 @@ execute:
 library(tidyverse)
 library(kableExtra)
 library(knitr)
+library(broom)
 
 co2 <- read_csv("co2.csv")
 ipp <- read_csv("ipp.csv")
@@ -208,6 +209,7 @@ proportion_variability
 ```
 75.73% of the variation in average CO2 emissions is explained by the linear regression model, using average income per capita as the predictor variable. This R-squared shows that our model is of reasonable quality, as it shows a good amount of correlation. Ideally we would have an R-squared value even higher (0.9 to 0.95) in order to make precise predictions, but our value of 0.75 is likely enough to establish correlation between average income per capita and CO2 emissions.
 
+# MAKE SURE TO CITE CODE!
 ```{r}
 noise <- function(x, mean = 0, sd){
   x + rnorm(length(x), 
@@ -215,14 +217,42 @@ noise <- function(x, mean = 0, sd){
             sd)
 }
 
-sim_response <- tibble(sim_average_emissions = noise(predict(model), 
-                                           sd = sigma(model)))
+sim_response <- tibble(sim_average_emissions = noise(predict(model), sd = sigma(model)))
 ```
 
 ```{r}
 nsims <- 1500
 sims <- map_dfc(.x = 1:nsims,
                 .f = ~ tibble(sim_average_emissions = noise(predict(model), sd = sigma(model))))
+```
 
-head(sims)
+```{r}
+colnames(sims) <- colnames(sims) |> 
+  str_replace(pattern = "\\.\\.\\.",
+                  replace = "_")
+
+sims <- linear_data |> 
+  select(average_emission) |> 
+  bind_cols(sims)
+```
+
+```{r}
+sim_r_sq <- sims |> 
+  map(~ lm(average_emission ~ .x, data = sims)) |> 
+  map(glance) |> 
+  map_dbl(~ .x$r.squared)
+
+head(sim_r_sq)
+```
+
+```{r}
+sim_r_sq <- sim_r_sq[names(sim_r_sq) != "average_emission"]
+
+tibble(sims = sim_r_sq) |> 
+  ggplot(aes(x = sims)) + 
+  geom_histogram(binwidth = 0.025) +
+  labs(x = expression("Simulated"~ R^2),
+       y = "",
+       subtitle = "Number of Simulated Models") +
+  theme_bw()
 ```
