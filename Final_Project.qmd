@@ -10,7 +10,7 @@ format:
 editor: source
 execute: 
   error: true
-  echo: true
+  echo: false
   message: false
   warning: false
 ---
@@ -25,6 +25,9 @@ ipp <- read_csv("ipp.csv")
 
 options(scipen = 999)
 ```
+
+# ADD CITATION - we need to have both in-line citations/ paranthesis and a reference section in 
+# Data Sources need to be cited and description of variables 
 
 ## Data Description
 
@@ -199,5 +202,7 @@ data.frame(Variance_Type = c("Response Values", "Fitted Values", "Residuals"),
 proportion_variability <- 1 - (residuals / response)
 
 proportion_variability
+
+cor(merged_data, [, c("emissions", "average_income")])
 ```
 75.73% of the variation in average CO2 emissions is explained by the linear regression model, using average income per capita as the predictor variable. This R-squared shows that our model is of reasonable quality, as it shows a good amount of correlation. Ideally we would have an R-squared value even higher (0.9 to 0.95) in order to make precise predictions, but our value of 0.75 is likely enough to establish correlation between average income per capita and CO2 emissions.
