@@ -26,7 +26,7 @@ ipp <- read_csv("ipp.csv")
 options(scipen = 999)
 ```
 
-## Data Description
+# Data Description
 
 The two variables that we are interested in are the average daily income per capita (independent variable) and how it is related to CO2 emissions per capita (response variable).
 
@@ -39,7 +39,7 @@ On Gapminder, this dataset is titled "Average daily income per capita, PPP (cons
 
 The CO2 data set describes the consumption based CO2 emissions in million tonnes of CO2 per capita. These values are based on the Global Carbon Project 2021. On Gapminder, this dataset is titled "CO2 emissions per capita (Consumption based)".
 
-## Hypothesis
+### Hypothesis
 
 According to some [research](https://www.cgdev.org/media/who-caused-climate-change-historically#:~:text=Developed%20Countries%20Are%20Responsible%20for,Global%20Development%20%7C%20Ideas%20to%20Action), we anticipate that more economically developed countries (those with higher average incomes per capita) will be correlated with higher CO2 emissions compared to countries with lower average incomes per capita.
 
@@ -124,9 +124,9 @@ merged_data <- inner_join(co2_long, ipp_long, by = c("country", "year")) %>%
   drop_na()
 ```
 
-## Linear Regression
+# Linear Regression
 
-### Data Visualization
+## Data Visualization
 
 #### Income vs. Emissions
 ```{r}
@@ -140,7 +140,6 @@ merged_data %>%
 This graph demonstrates the relationship between average income per capita (x) and CO2 emissions per capita (y). From the graph, we can see that the points appear to follow a positive, somewhat linear correlation. Additionally, we assumed that the negative CO2 emission values could potentially be from countries that actually filter more CO2 out of the atmosphere than they emit, for example tree/vegetation dense areas that are able to remove large emission amounts.
 
 #### Relationship Over Time
-
 ```{r}
 merged_data %>%
   mutate(year = as.factor(year)) %>%
@@ -158,7 +157,7 @@ The varying width of intervals on the x-axis for years is a result of missing va
 Furthermore, the relationship between average income per capita vs emissions over time is shown above. There appears to be a positive correlation between income and CO2 emissions. Graphically, we can see that countries with lower average incomes per capita (closer to 0) are lower on the emission scale (blue), whereas the higher emissions are correlated with countries with higher incomes (red/pink). Also, over time, average income per capita has dramatically increased overall. There is a spike in emissions around the 50's through 70's, this could be due to less regulation and the post-war economy.
 
 
-### Linear Regression Model
+## Linear Regression Model
 
 For wrangling our data to use for the linear regression model, we decided to summarize our data so we have one x and y value for each country. However, due to the spike in emissions in more recent years, we decided to take the average from 1990 to 2020. We also considered making several intervals of 30 years to increase our data availability, but decided that ultimately pulling data from more recent years in which emissions spiked would be the most insightful. 
 
@@ -182,7 +181,7 @@ linear_data |>
 ```
 This graph demonstrates the linear regression for average income per capita (explanatory), and average CO2 emissions per capita (response) from data timing across the years 1990-2020. Each country has an average income and emission value over the entirety of the 30 years, which is the time frame that contains the most recent and reliable numeric values. From the graph, we can see that our line of best fit using the ordinary least squares (OLS) closely follows the data points for the majority of our data 
 
-#### Regression Equation 
+### Regression Equation 
 
 $$average\_emission = 0.505 + 0.278*average\_income$$
 Where $average\_emission$ is the emissions per capita of a country, measured in millions of tonnes of CO2, and $average\_income$ is the average income per capita in constant international dollars.
