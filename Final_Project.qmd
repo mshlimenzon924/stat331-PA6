@@ -188,7 +188,7 @@ Interpretation of the Intercept: For countries with an average income per capita
 Interpretation of $a$: Each increase in one constant international dollar is associated with an increase of .278 million tonnes in CO2 emissions per capita for all countries similar to those in the study.
 
 ```{r}
-response <- var(merged_data$emissions)
+response <- var(linear_data$average_emission)
 fitted <- var(fitted(model))
 residuals <- var(residuals(model))
 
@@ -202,7 +202,5 @@ data.frame(Variance_Type = c("Response Values", "Fitted Values", "Residuals"),
 proportion_variability <- 1 - (residuals / response)
 
 proportion_variability
-
-cor(merged_data, [, c("emissions", "average_income")])
 ```
 75.73% of the variation in average CO2 emissions is explained by the linear regression model, using average income per capita as the predictor variable. This R-squared shows that our model is of reasonable quality, as it shows a good amount of correlation. Ideally we would have an R-squared value even higher (0.9 to 0.95) in order to make precise predictions, but our value of 0.75 is likely enough to establish correlation between average income per capita and CO2 emissions.
