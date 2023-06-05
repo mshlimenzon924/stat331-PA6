@@ -207,3 +207,22 @@ proportion_variability <- 1 - (residuals / response)
 proportion_variability
 ```
 75.73% of the variation in average CO2 emissions is explained by the linear regression model, using average income per capita as the predictor variable. This R-squared shows that our model is of reasonable quality, as it shows a good amount of correlation. Ideally we would have an R-squared value even higher (0.9 to 0.95) in order to make precise predictions, but our value of 0.75 is likely enough to establish correlation between average income per capita and CO2 emissions.
+
+```{r}
+noise <- function(x, mean = 0, sd){
+  x + rnorm(length(x), 
+            mean, 
+            sd)
+}
+
+sim_response <- tibble(sim_average_emissions = noise(predict(model), 
+                                           sd = sigma(model)))
+```
+
+```{r}
+nsims <- 1500
+sims <- map_dfc(.x = 1:nsims,
+                .f = ~ tibble(sim_average_emissions = noise(predict(model), sd = sigma(model))))
+
+head(sims)
+```
