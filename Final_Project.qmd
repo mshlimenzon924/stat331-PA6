@@ -197,11 +197,15 @@ fitted <- var(fitted(model))
 residuals <- var(residuals(model))
 
 
-data.frame(Variance_Type = c("Response Values", "Fitted Values", "Residuals"),
-  Variance = c(response, fitted, residuals)) %>%
-  kable(align = "c") %>%
-  kable_styling(full_width = FALSE, bootstrap_options = c("hover")) %>%
-  row_spec(0, bold = TRUE, background = "#d8e8e1") 
+df <- data.frame(Variance_Type = c("Response Values", "Fitted Values", "Residuals"),
+  Variance = c(response, fitted, residuals)) 
+
+df %>%
+kable(format = "html", col.names = c('Variance Type', 'Variance')) %>%
+column_spec(1, italic = TRUE)  %>%
+kable_classic_2(full_width = F, html_font = "Cambria") %>%
+add_header_above(font_size = 16, bold = TRUE, c("Variability Information" = 2), background = "lightgray") %>%
+row_spec(0, bold = TRUE)
 
 proportion_variability <- 1 - (residuals / response)
 
