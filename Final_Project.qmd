@@ -173,11 +173,18 @@ linear_data <- merged_data %>%
 ```{r}
 model <- lm(average_emission ~ average_income, data = linear_data)
 summary(model)
+
+linear_data |>
+  ggplot(mapping = aes(x = average_income, y = average_emission)) +
+  geom_point() +
+  geom_smooth(method = "lm", se = FALSE) +
+  labs(x = "Average Income (Per Capita)", y = "", subtitle = "Average CO2 Emission (Per Capita)", title = "Linear Regression of Average Income and Average CO2 Per Capita")
 ```
+This graph demonstrates the linear regression for average income per capita (explanatory), and average CO2 emissions per capita (response) from data timing across the years 1990-2020. Each country has an average income and emission value over the entirety of the 30 years, which is the time frame that contains the most recent and reliable numeric values. From the graph, we can see that our line of best fit using the ordinary least squares (OLS) closely follows the data points for the majority of our data 
 
 #### Regression Equation 
 
-$$average\_emission = 0.505 + 0.278average\_income$$
+$$average\_emission = 0.505 + 0.278*average\_income$$
 Where $average\_emission$ is the emissions per capita of a country, measured in millions of tonnes of CO2, and $average\_income$ is the average income per capita in constant international dollars.
 
 Interpretation of the Intercept: For countries with an average income per capita of 0 constant international dollars, the estimated CO2 emissions per capita is .505 million tonnes.
