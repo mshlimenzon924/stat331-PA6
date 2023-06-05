@@ -28,6 +28,7 @@ options(scipen = 999)
 
 # ADD CITATION - we need to have both in-line citations/ paranthesis and a reference section in 
 # Data Sources need to be cited and description of variables 
+# We need it to be read, only paragraphs, no acronyms, 
 
 ## Data Description
 
