@@ -178,11 +178,11 @@ summary(model)
 #### Regression Equation 
 
 $$emissions = 0.505 + 0.278average.income$$
-Where $e$ is the emissions per capita of a country, measured in millions of tonnes of CO2, and $a$ is the average income per capita in constant international dollars.
+Where $emissions$ is the emissions per capita of a country, measured in millions of tonnes of CO2, and $average.income$ is the average income per capita in constant international dollars.
 
 Interpretation of the Intercept: For countries with an average income per capita of 0 constant international dollars, the estimated CO2 emissions per capita is .505 million tonnes.
 
-Interpretation of $a$: Each increase in one constant international dollar of income per capita is associated with an increase of .278 million tonnes in CO2 emissions per capita for all countries similar to those in the study.
+Interpretation of $average.income$: Each increase in one constant international dollar of income per capita is associated with an increase of .278 million tonnes in CO2 emissions per capita for all countries similar to those in the study.
 
 ```{r}
 response <- var(linear_data$average_emission)
