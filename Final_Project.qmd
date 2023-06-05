@@ -26,10 +26,6 @@ ipp <- read_csv("ipp.csv")
 options(scipen = 999)
 ```
 
-# ADD CITATION - we need to have both in-line citations/ paranthesis and a reference section in 
-# Data Sources need to be cited and description of variables 
-# We need it to be read, only paragraphs, no acronyms, 
-
 ## Data Description
 
 The two variables that we are interested in are the average daily income per capita (independent variable) and how it is related to CO2 emissions per capita (response variable).
@@ -181,7 +177,7 @@ summary(model)
 
 #### Regression Equation 
 
-$$e = 0.505 + 0.278a$$
+$$emissions = 0.505 + 0.278average.income$$
 Where $e$ is the emissions per capita of a country, measured in millions of tonnes of CO2, and $a$ is the average income per capita in constant international dollars.
 
 Interpretation of the Intercept: For countries with an average income per capita of 0 constant international dollars, the estimated CO2 emissions per capita is .505 million tonnes.
