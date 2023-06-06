@@ -20,6 +20,7 @@ library(tidyverse)
 library(kableExtra)
 library(knitr)
 library(broom)
+library(patchwork)
 
 co2 <- read_csv("co2.csv")
 ipp <- read_csv("ipp.csv")
@@ -213,6 +214,9 @@ proportion_variability
 ```
 75.73% of the variation in average CO2 emissions is explained by the linear regression model, using average income per capita as the predictor variable. This R-squared shows that our model is of reasonable quality, as it shows a good amount of correlation. Ideally we would have an R-squared value even higher (0.9 to 0.95) in order to make precise predictions, but our value of 0.75 is likely enough to establish correlation between average income per capita and CO2 emissions.
 
+#3. Simulation
+##3.1 Visualizing Simulations from the Model
+
 # MAKE SURE TO CITE CODE!
 ```{r}
 noise <- function(x, mean = 0, sd){
@@ -224,6 +228,88 @@ noise <- function(x, mean = 0, sd){
 sim_response <- tibble(sim_average_emissions = noise(predict(model), sd = sigma(model)))
 ```
 
+```{r}
+linear_data
+```
+
+```{r}
+obs_p <- linear_data |>
+  ggplot(aes(x = average_emission)) +
+  geom_histogram() +
+  labs(x = "Average Emissions",
+       y = "",
+       subtitle = "Count") +
+  theme_bw()
+
+new_p <- sim_response |>
+  ggplot(aes(x = sim_average_emissions)) +
+  geom_histogram() +
+  labs(x = "Simulated Average Emissions",
+       y = "",
+       subtitle = "Count") +
+  theme_bw()
+
+obs_p + new_p
+```
+```{r}
+sim_data <- linear_data |>
+  bind_cols(sim_response)
+```
+
+```{r}
+obs_reg_p <- linear_data |>
+  ggplot(aes(y =  average_emission,
+             x = average_income)) +
+  geom_point() +
+  labs(title = "Average Emissions",
+       x = "Average Income",
+       y = "",
+       subtitle = "Average Emission") +
+  theme_bw()
+
+sim_reg_p <-sim_data |>
+  ggplot(aes(y = sim_average_emissions,
+             x = average_income)) +
+   labs(title = "Simulated Average Emissions \nbased on Regression Model",
+       x = "Average Income",
+       y = "",
+       subtitle = "Average Emission") +
+  theme_bw()
+
+obs_reg_p + sim_reg_p
+
+```
+```{r}
+sim_data |> 
+  ggplot(aes(x = sim_average_emissions, 
+             y = average_income)
+         ) + 
+  geom_point() + 
+   labs(x = "Simulated Average Emissions", 
+        y = "",
+        subtitle = "Observed Average Emissions" ) + 
+  geom_abline(slope = 1,
+              intercept = 0, 
+              color = "steelblue",
+              linetype = "dashed",
+              lwd = 1.5) +
+  theme_bw()
+```
+```{r}
+lm(average_emission ~ sim_average_emissions, 
+   data = sim_data
+   ) |> 
+  glance() 
+
+sim_r2 <- lm(average_emission ~ sim_average_emissions, 
+             data = sim_data
+             ) |> 
+  glance() |> 
+  select(r.squared) |> 
+  pull()
+sim_r2
+```
+##3.2 Generating Multiple Predictive Checks
 ```{r}
 nsims <- 1500
 sims <- map_dfc(.x = 1:nsims,
@@ -238,6 +324,32 @@ colnames(sims) <- colnames(sims) |>
 sims <- linear_data |> 
   select(average_emission) |> 
   bind_cols(sims)
+```
+
+
+```{r}
+obs_reg_p <- penguins |>
+  ggplot(aes(y = body_mass_g,
+             x = flipper_length_mm)) +
+  geom_point() +
+  labs(title = "Observed Body Mass",
+       x = "Flipper Length (mm)",
+       y = "",
+       subtitle = "Body Mass (g)") +
+  theme_bw()
+
+sim_reg_p <-sim_data |>
+  ggplot(aes(y = sim_body_mass_g,
+             x = flipper_length_mm)
+         ) +
+  geom_point() +
+   labs(title = "Simulated Body Mass \nbased on Regression Model",
+       x = "Flipper Length (mm)",
+       y = "",
+       subtitle = "Body Mass (g)") +
+  theme_bw()
+
+obs_reg_p + sim_reg_p
 ```
 
 ```{r}
