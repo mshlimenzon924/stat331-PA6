@@ -256,29 +256,33 @@ sim_data <- linear_data |>
   bind_cols(sim_response)
 ```
 
+
 ```{r}
-obs_reg_p <- linear_data |>
-  ggplot(aes(y =  average_emission,
+obs_reg <- sim_data |>
+  ggplot(aes(y = average_emission,
              x = average_income)) +
   geom_point() +
-  labs(title = "Average Emissions",
-       x = "Average Income",
+  labs(title = "Average Income vs Average CO2 Emission",
+       x = "Average Income (PPP)",
        y = "",
-       subtitle = "Average Emission") +
+       subtitle = "Average CO2 Emission (million tonnes") +
   theme_bw()
 
-sim_reg_p <-sim_data |>
+sim_reg <- sim_data |>
   ggplot(aes(y = sim_average_emissions,
-             x = average_income)) +
-   labs(title = "Simulated Average Emissions \nbased on Regression Model",
-       x = "Average Income",
+             x = average_income)
+         ) +
+  geom_point() +
+   labs(title = "Average Income vs Simulated C02 Emission",
+       x = "Average Income (PPP)",
        y = "",
-       subtitle = "Average Emission") +
+       subtitle = "Simulated CO2 Emission") +
   theme_bw()
 
-obs_reg_p + sim_reg_p
-
+obs_reg + sim_reg
 ```
+
+
 ```{r}
 sim_data |> 
   ggplot(aes(x = sim_average_emissions, 
@@ -326,31 +330,6 @@ sims <- linear_data |>
   bind_cols(sims)
 ```
 
-
-```{r}
-obs_reg_p <- penguins |>
-  ggplot(aes(y = body_mass_g,
-             x = flipper_length_mm)) +
-  geom_point() +
-  labs(title = "Observed Body Mass",
-       x = "Flipper Length (mm)",
-       y = "",
-       subtitle = "Body Mass (g)") +
-  theme_bw()
-
-sim_reg_p <-sim_data |>
-  ggplot(aes(y = sim_body_mass_g,
-             x = flipper_length_mm)
-         ) +
-  geom_point() +
-   labs(title = "Simulated Body Mass \nbased on Regression Model",
-       x = "Flipper Length (mm)",
-       y = "",
-       subtitle = "Body Mass (g)") +
-  theme_bw()
-
-obs_reg_p + sim_reg_p
-```
 
 ```{r}
 sim_r_sq <- sims |> 
