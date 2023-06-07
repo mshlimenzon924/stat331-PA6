@@ -40,9 +40,11 @@ The income dataset contains information regarding each country's average daily h
 
 The CO2 data set describes the consumption based CO2 emissions in million tonnes of CO2 per capita. These values are based on the Global Carbon Project 2021. On Gapminder, this dataset is titled "CO2 emissions per capita (Consumption based)".
 
+*Note: This is all of the information available for this dataset on Gapminder.*
+
 ### Hypothesis
 
-According to some [research](https://www.cgdev.org/media/who-caused-climate-change-historically#:~:text=Developed%20Countries%20Are%20Responsible%20for,Global%20Development%20%7C%20Ideas%20to%20Action), we anticipate that more economically developed countries (those with higher average incomes per capita) will be correlated with higher CO2 emissions compared to countries with lower average incomes per capita.
+According to additional [research](https://www.cgdev.org/media/who-caused-climate-change-historically#:~:text=Developed%20Countries%20Are%20Responsible%20for,Global%20Development%20%7C%20Ideas%20to%20Action), we anticipate that more economically developed countries (those with higher average daily incomes per capita) will be correlated with higher average CO2 emissions compared to countries with lower average daily incomes per capita.
 
 ## Data Cleaning
 
@@ -76,7 +78,7 @@ co2 <- co2 %>%
 ### Income Dataset
 
 This dataset suffered from a similar problem to that of the CO2 dataset, so we can
-re-use our cleaning function on `ipp`.
+re-use our cleaning function on our average daily income dataset.
 
 ```{r}
 ipp <- ipp %>%
@@ -89,8 +91,8 @@ ipp <- ipp %>%
 
 Our CO2 dataset also included negative values, which were encoded as strings due
 to them using a "−", rather than "-" (note the slight difference). This was fixed
-by replacing the dash with a traditional hyphen so that `as.numeric` could interpret
-the string, and then converting the values.
+by replacing the dash with a traditional hyphen so that we could convert the string
+to a numeric value.
 
 ```{r}
 co2_long <- co2 %>%
@@ -117,9 +119,9 @@ ipp_long <- ipp %>%
 
 ## Joining the Data
 
-While merging our data, we wanted to ensure that both the explanatory and response variables remained grouped by both the country for which the data was collected and the year. This will ensure that if we want to analyze specific countries then we can group by that aspect, similarly with the year. This will allow us to add details to our visualizations, if desired. 
+While merging our data, we wanted to ensure that both the explanatory and response variables remained grouped by both the country for which the data was collected and the year. This will ensure that if we want to analyze specific countries then we can group by that aspect, similarly with the year. 
 
-We decided to drop all of the NA values in the merged data set. This is because with regards to correlation and linear regression, it is generally recommended to remove rows with missing values. When there are missing values in either the predictor or the response variables it can create inconsistencies in the data. This could potentially lead to biased or inaccurate results. Although lm and ggplot automatically drop the NA values, if we plan on doing further summary analysis we want to use the data that is demonstrated in our models.
+We decided to drop all of the rows that had missing values for either average emissions or average income in the merged data set. This is because with regards to correlation and linear regression, it is generally recommended to remove rows with missing values. When there are missing values in either the predictor or the response variables it can create inconsistencies in the data. This could potentially lead to biased or inaccurate results. Although lm and ggplot automatically drop the NA values, if we plan on doing further summary analysis we want to use the data that is demonstrated in our models.
 ```{r join}
 merged_data <- inner_join(co2_long, ipp_long, by = c("country", "year")) %>%
   drop_na()
