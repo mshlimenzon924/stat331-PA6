@@ -144,15 +144,16 @@ This graph demonstrates the relationship between average income per capita (x) a
 #### Relationship Over Time
 ```{r}
 merged_data %>%
+  filter(year %in% c(1920, 1940, 1960, 1980, 2000, 2020)) %>%
   mutate(year = as.factor(year)) %>%
-  ggplot(mapping = aes(x = year, y = average_income_per_capita, color = emissions)) +
-  geom_line(alpha = 0.3) +
-  scale_x_discrete(breaks = unique(merged_data$year)[c(T, rep(FALSE, 35))]) +
-  labs(x = "Year", y = "",
+  ggplot(mapping = aes(x = average_income_per_capita, y = emissions)) +
+  geom_point(alpha = .3, color = "purple") +
+  labs(x = "Average Income per Capita", y = "",
        title = "Relationship between Average Income and CO2 Emissions Per Capita Over Time",
-       subtitle = "Average Income Per Capita (PPP)") +
-  scale_color_gradient(low = "blue", high = "red", name = "Emissions (million tonnes)")
+       subtitle = "Emissions per Capita (million tonnes)") +
+  facet_wrap(~year)
 ```
+
 
 The varying width of intervals on the x-axis for years is a result of missing values. Each country has an x and y value for each year theoretically, but if there are missing values, which are filtered out, then the amount of values to plot decreases for that given year, resulting in slightly different widths on the x-axis.
 
