@@ -363,3 +363,13 @@ tibble(sims = sim_r_sq) %>%
        subtitle = "Number of Simulated Models") +
   theme_bw()
 ```
+
+### Works Cited
+
+“A Grammar of Animated Graphics.” A Grammar of Animated Graphics •, gganimate.com/. Accessed 7 June 2023. 
+
+“‘Average Daily Income per Capita, PPP (Constant 2011 International $)’,‘CO2 Emissions Per Capita (Consumption Based).’” Gapminder, www.gapminder.org/data/. Accessed 7 June 2023. 
+
+“Developed Countries Are Responsible for 79 Percent of Historical Carbon Emissions.” Center For Global Development | Ideas to Action, www.cgdev.org/media/who-caused-climate-change-historically#:~:text=Developed%20Countries%20Are%20Responsible%20for,Global%20Development%20%7C%20Ideas%20to%20Action. Accessed 7 June 2023. 
+
+“10&nbsp; Predictive Checks.” Stat 331/531 Statistical Computing with R - 10&nbsp; Predictive Checks, earobinson95.github.io/stat331-calpoly-text/10-predictive-checks.html#ch10-checkins. Accessed 7 June 2023. 
