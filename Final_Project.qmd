@@ -34,8 +34,7 @@ The two variables that we are interested in are the average daily income per cap
 
 ### Income Dataset
 
-The income dataset contains information regarding each country's average daily household income based on a 2011 survey. These are measured in constant international dollars (PPP), converting the dollars to amounts that equalize the purchasing power across different currencies/regions. There does not appear to be NA values or a number that is replacing missing data, although our data cleaning will reveal more information regarding this. 
-On Gapminder, this dataset is titled "Average daily income per capita, PPP (constant 2011 international $)".
+The income dataset contains information regarding each country's average daily household income based on a 2011 survey. These are measured in constant international dollars (PPP), converting the dollars to amounts that equalize the purchasing power across different currencies/regions. Our data cleaning will reveal more information regarding missing values and numbers that are replacing missing data. On Gapminder, this dataset is titled "Average daily income per capita, PPP (constant 2011 international $)".
 
 ### CO2 Dataset
 
