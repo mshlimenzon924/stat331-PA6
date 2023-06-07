@@ -281,12 +281,13 @@ sim_reg <- sim_data |>
 
 obs_reg + sim_reg
 ```
+From the plots above, we can see that the actual data and simulated data both have positive, linear correlations. However, the actual data appears to have a fan shape, where the points near the origin are clustered very close together, and then as the x-value increases the points spread out. Comparatively, the simulated data clusters upward towards the y-axis from about 5-10 million tonnes of CO2, and is a thicker, more consistent cluster of points as a whole rather than a fan shape. There are several reasons why the points differ. In order to create the simulated CO2 values, R uses our regression equation within our model to predict CO2 emission values based on specific x values. Because it is not realistic for all of these points to lie exactly on the regression line, we added some noise to the points randomly and join the simulated data with our original data set.  
 
 
 ```{r}
 sim_data |> 
   ggplot(aes(x = sim_average_emissions, 
-             y = average_income)
+             y = average_emission)
          ) + 
   geom_point() + 
    labs(x = "Simulated Average Emissions", 
