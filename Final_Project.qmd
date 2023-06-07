@@ -176,7 +176,7 @@ linear_data <- merged_data %>%
 model <- lm(average_emission ~ average_income, data = linear_data)
 summary(model)
 
-linear_data |>
+linear_data %>%
   ggplot(mapping = aes(x = average_income, y = average_emission)) +
   geom_point() +
   geom_smooth(method = "lm", se = FALSE) +
@@ -234,7 +234,7 @@ linear_data
 ```
 
 ```{r}
-obs_p <- linear_data |>
+obs_p <- linear_data %>%
   ggplot(aes(x = average_emission)) +
   geom_histogram() +
   labs(x = "Average Emissions",
@@ -242,7 +242,7 @@ obs_p <- linear_data |>
        subtitle = "Count") +
   theme_bw()
 
-new_p <- sim_response |>
+new_p <- sim_response %>%
   ggplot(aes(x = sim_average_emissions)) +
   geom_histogram() +
   labs(x = "Simulated Average Emissions",
@@ -253,13 +253,13 @@ new_p <- sim_response |>
 obs_p + new_p
 ```
 ```{r}
-sim_data <- linear_data |>
+sim_data <- linear_data %>%
   bind_cols(sim_response)
 ```
 
 
 ```{r}
-obs_reg <- sim_data |>
+obs_reg <- sim_data %>%
   ggplot(aes(y = average_emission,
              x = average_income)) +
   geom_point() +
@@ -269,7 +269,7 @@ obs_reg <- sim_data |>
        subtitle = "Average CO2 Emission (million tonnes") +
   theme_bw()
 
-sim_reg <- sim_data |>
+sim_reg <- sim_data %>%
   ggplot(aes(y = sim_average_emissions,
              x = average_income)
          ) +
@@ -286,7 +286,7 @@ From the plots above, we can see that the actual data and simulated data both ha
 
 
 ```{r}
-sim_data |> 
+sim_data %>% 
   ggplot(aes(x = sim_average_emissions, 
              y = average_emission)
          ) + 
@@ -304,14 +304,14 @@ sim_data |>
 ```{r}
 lm(average_emission ~ sim_average_emissions, 
    data = sim_data
-   ) |> 
+   ) %>% 
   glance() 
 
 sim_r2 <- lm(average_emission ~ sim_average_emissions, 
              data = sim_data
-             ) |> 
-  glance() |> 
-  select(r.squared) |> 
+             ) %>% 
+  glance() %>% 
+  select(r.squared) %>% 
   pull()
 sim_r2
 ```
@@ -323,20 +323,20 @@ sims <- map_dfc(.x = 1:nsims,
 ```
 
 ```{r}
-colnames(sims) <- colnames(sims) |> 
+colnames(sims) <- colnames(sims) %>% 
   str_replace(pattern = "\\.\\.\\.",
                   replace = "_")
 
-sims <- linear_data |> 
-  select(average_emission) |> 
+sims <- linear_data %>% 
+  select(average_emission) %>% 
   bind_cols(sims)
 ```
 
 
 ```{r}
-sim_r_sq <- sims |> 
-  map(~ lm(average_emission ~ .x, data = sims)) |> 
-  map(glance) |> 
+sim_r_sq <- sims %>% 
+  map(~ lm(average_emission ~ .x, data = sims)) %>% 
+  map(glance) %>% 
   map_dbl(~ .x$r.squared)
 
 head(sim_r_sq)
@@ -345,7 +345,7 @@ head(sim_r_sq)
 ```{r}
 sim_r_sq <- sim_r_sq[names(sim_r_sq) != "average_emission"]
 
-tibble(sims = sim_r_sq) |> 
+tibble(sims = sim_r_sq) %>% 
   ggplot(aes(x = sims)) + 
   geom_histogram(binwidth = 0.025) +
   labs(x = expression("Simulated"~ R^2),
