@@ -364,7 +364,7 @@ tibble(sims = sim_r_sq) %>%
   theme_bw()
 ```
 
-### Works Cited
+# Works Cited
 
 “A Grammar of Animated Graphics.” A Grammar of Animated Graphics •, gganimate.com/. Accessed 7 June 2023. 
 
