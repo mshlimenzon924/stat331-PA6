@@ -212,6 +212,8 @@ proportion_variability <- 1 - (residuals / response)
 
 proportion_variability
 ```
+The variance (the distribution of a set of data points) of the response values showcases how average_emission varies 45.10085 per capita over time. The variance of the fitted values highlights how much the values predicted by the model are distributed with a variation of 34.15482. The variance of the residuals describes the spread of the difference between the observed values and their corresponding fitted values. This discusses the variability the model doesn't account for which is 10.94603.
+
 75.73% of the variation in average CO2 emissions is explained by the linear regression model, using average income per capita as the predictor variable. This R-squared shows that our model is of reasonable quality, as it shows a good amount of correlation. Ideally we would have an R-squared value even higher (0.9 to 0.95) in order to make precise predictions, but our value of 0.75 is likely enough to establish correlation between average income per capita and CO2 emissions.
 
 #3. Simulation
