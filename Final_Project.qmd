@@ -300,6 +300,15 @@ sim_data %>%
               lwd = 1.5) +
   theme_bw()
 ```
+
+This graph displays our simulated emissions data against our observed data. The
+line at $y = x$ represents an exact match between the two datasets. It is visible that
+the two datasets follow the slope of our fitting line. However, this graph also presents
+a difference between the two datasets. The simulated dataset has the same amount of noise
+regardless of the emission amount, while our observed data has less noise when values are low,
+and more when they are high. This is displayed in that low emission values are vertically dense
+in the observed data, and horizontally spread out in the simulated data.
+
 ```{r}
 lm(average_emission ~ sim_average_emissions, 
    data = sim_data
