@@ -1,5 +1,5 @@
 ---
-title: "Final Project Linear Regression"
+title: "Final Project"
 author: "Stolie Erickson, Mira Shlimenzon, Joseph Konat, Casey Avila"
 format: 
   html:
@@ -21,6 +21,7 @@ library(kableExtra)
 library(knitr)
 library(broom)
 library(patchwork)
+library(gganimate)
 
 co2 <- read_csv("co2.csv")
 ipp <- read_csv("ipp.csv")
@@ -28,9 +29,11 @@ ipp <- read_csv("ipp.csv")
 options(scipen = 999)
 ```
 
-# Data Description
+# Project Proposal and Data
 
-The two variables that we are interested in are the average daily income per capita (independent variable) and how it is related to CO2 emissions per capita (response variable).
+## Data Description
+
+The two variables that we are interested in are the average daily income per capita (explanatory variable) and how it is related to CO2 emissions per capita (response variable).
 
 ### Income Dataset
 
@@ -42,7 +45,7 @@ The CO2 data set describes the consumption based CO2 emissions in million tonnes
 
 *Note: This is all of the information available for this dataset on Gapminder.*
 
-### Hypothesis
+## Hypothesis
 
 According to additional [research](https://www.cgdev.org/media/who-caused-climate-change-historically#:~:text=Developed%20Countries%20Are%20Responsible%20for,Global%20Development%20%7C%20Ideas%20to%20Action), we anticipate that more economically developed countries (those with higher average daily incomes per capita) will be correlated with higher average CO2 emissions compared to countries with lower average daily incomes per capita.
 
@@ -92,7 +95,10 @@ ipp <- ipp %>%
 Our CO2 dataset also included negative values, which were encoded as strings due
 to them using a "−", rather than "-" (note the slight difference). This was fixed
 by replacing the dash with a traditional hyphen so that we could convert the string
-to a numeric value.
+to a numeric value. Additionally—rather than cleaning out these values—we assumed
+that the negative CO2 emission valuescould potentially be from countries that actually
+filter more CO2 out of the atmosphere than they emit, for example tree/vegetation dense
+areas that are able to remove large amounts of carbon dioxide.
 
 ```{r}
 co2_long <- co2 %>%
@@ -122,6 +128,7 @@ ipp_long <- ipp %>%
 While merging our data, we wanted to ensure that both the explanatory and response variables remained grouped by both the country for which the data was collected and the year. This will ensure that if we want to analyze specific countries then we can group by that aspect, similarly with the year. 
 
 We decided to drop all of the rows that had missing values for either average emissions or average income in the merged data set. This is because with regards to correlation and linear regression, it is generally recommended to remove rows with missing values. When there are missing values in either the predictor or the response variables it can create inconsistencies in the data. This could potentially lead to biased or inaccurate results. Although lm and ggplot automatically drop the NA values, if we plan on doing further summary analysis we want to use the data that is demonstrated in our models.
+
 ```{r join}
 merged_data <- inner_join(co2_long, ipp_long, by = c("country", "year")) %>%
   drop_na()
@@ -131,7 +138,8 @@ merged_data <- inner_join(co2_long, ipp_long, by = c("country", "year")) %>%
 
 ## Data Visualization
 
-#### Income vs. Emissions
+### Relationship Between Variables
+
 ```{r}
 merged_data %>%
   ggplot(mapping = aes(x = average_income_per_capita, y = emissions)) +
@@ -140,9 +148,10 @@ merged_data %>%
        title = "Relationship between Average Income and CO2 Emissions Per Capita",
        subtitle = "CO2 Emissions Per Capita (million tonnes)")
 ```
-This graph demonstrates the relationship between average income per capita (x) and CO2 emissions per capita (y). From the graph, we can see that the points appear to follow a positive, somewhat linear correlation. Additionally, we assumed that the negative CO2 emission values could potentially be from countries that actually filter more CO2 out of the atmosphere than they emit, for example tree/vegetation dense areas that are able to remove large emission amounts.
+This graph demonstrates the relationship between average income per capita (x) and CO2 emissions per capita (y). Each point on this graph corresponds to a country and the year in which these metrics were measured. From the graph, we can see that the points appear to follow a positive, somewhat linear correlation (increases in average daily income are correlated with increases in CO2 emissions).
 
-#### Relationship Over Time
+### Relationship Over Time
+
 ```{r}
 merged_data %>%
   filter(year %in% c(1920, 1940, 1960, 1980, 2000, 2020)) %>%
@@ -150,20 +159,38 @@ merged_data %>%
   ggplot(mapping = aes(x = average_income_per_capita, y = emissions)) +
   geom_point(alpha = .3, color = "purple") +
   labs(x = "Average Income per Capita", y = "",
-       title = "Relationship between Average Income and CO2 Emissions Per Capita Over Time",
+       title = "Relationship between Average Income and CO2 Emissions\nPer Capita Every 20 years",
        subtitle = "Emissions per Capita (million tonnes)") +
   facet_wrap(~year)
 ```
 
 
-In the above graph, we have displayed average income per capita vs emissions per capita for six different years: 1920, 1940, 1960, 1980, 2000, and 2020. We Included these intervals and faceted each graph so that the evolution of the relationship between income and relationship can be more easily seen. The interval of 1920 - 2020 was used due to the higher quantity of data (emissions and income). We used six different years specifically because we felt it gave the most clear and easy to visualize comparison between different time periods. 
+In the above graph, we have displayed average income per capita vs emissions per capita for six different years: 1920, 1940, 1960, 1980, 2000, and 2020. We Included these intervals and faceted each graph so that the evolution of the relationship between income and relationship can be more easily seen. The interval of 1920 - 2020 was used due to the higher number of countries with both emissions and income data during these time periods. We used six different years specifically because we felt it gave the most clear and easy to visualize comparison between different time periods. 
 
 There appears to be a positive correlation between income and CO2 emissions. Over time, average income per capita has dramatically increased. Since 1960 there appears to be a stronger linear relationship between each variable, with an increase in both income and emissions per capita.  
 
+#### Animated Visualization
+
+This visualization shows the relationship between our variables with the year animated,
+clearly showing the increase both average daily income and CO2 emissions over time.
+
+```{r}
+anim_plot <- merged_data %>%
+  ggplot(mapping = aes(x = average_income_per_capita, y = emissions)) +
+  geom_point(alpha = 0.3, color = "steelblue") +
+  labs(x = "Average Income Per Capita (PPP)", y = "",
+       title = "Relationship between Average Income and CO2 Emissions Per Capita\nin {frame_time}",
+       subtitle = "CO2 Emissions Per Capita (million tonnes)") +
+  transition_time(as.integer(year))
+
+animate(anim_plot, renderer = magick_renderer())
+```
 
 ## Linear Regression Model
 
-For wrangling our data to use for the linear regression model, we decided to summarize our data so we have one x and y value for each country. However, due to the spike in emissions in more recent years, we decided to take the average from 1990 to 2020. We also considered making several intervals of 30 years to increase our data availability, but decided that ultimately pulling data from more recent years in which emissions spiked would be the most insightful. 
+Linear regression is a technique for modelling the relationship between two statistical variables (average daily income and average CO2 emissions per capita). It assumes that there is a linear relationship between these variables, and by calculating their mathematical relationship, we can gain insight on how these variables are related as well as make predictions. For this dataset, we make a linear regression model with our explanatory variable as average daily income per capita, and our response variable average carbon dioxide emissions. This will give us information that will test our hypothesis as well as allow us to predict emission levels given income.
+
+For wrangling our data to use for the linear regression model, we decided to summarize our data so we have one x and y value for each country. However, due to the increase in both emissions and income in recent decades, we decided to take the average from 1990 to 2020. We also considered making several intervals of 30 years to increase our data availability, but decided that ultimately pulling data from more recent years in which emissions increased significantly would be the most insightful.
 
 ```{r}
 linear_data <- merged_data %>%
@@ -171,7 +198,6 @@ linear_data <- merged_data %>%
   group_by(country) %>%
   summarize(average_emission = mean(emissions), average_income = mean(average_income_per_capita))
 ```
-
 
 ```{r}
 model <- lm(average_emission ~ average_income, data = linear_data)
@@ -185,7 +211,7 @@ linear_data %>%
 ```
 This graph demonstrates the linear regression for average income per capita (explanatory), and average CO2 emissions per capita (response) from data timing across the years 1990-2020. Each country has an average income and emission value over the entirety of the 30 years, which is the time frame that contains the most recent and reliable numeric values. From the graph, we can see that our line of best fit using the ordinary least squares (OLS) closely follows the data points for the majority of our data 
 
-### Regression Equation 
+### Model Interpretation
 
 $$average\_emission = 0.505 + 0.278*average\_income$$
 Where $average\_emission$ is the emissions per capita of a country, measured in millions of tonnes of CO2, and $average\_income$ is the average income per capita in constant international dollars.
@@ -193,6 +219,8 @@ Where $average\_emission$ is the emissions per capita of a country, measured in 
 Interpretation of the Intercept: For countries with an average income per capita of 0 constant international dollars, the estimated CO2 emissions per capita is .505 million tonnes.
 
 Interpretation of $average\_income$: Each increase in one constant international dollar of income per capita is associated with an increase of .278 million tonnes in CO2 emissions per capita for all countries similar to those in the study.
+
+### Variance Table
 
 ```{r}
 response <- var(linear_data$average_emission)
@@ -209,19 +237,28 @@ column_spec(1, italic = TRUE)  %>%
 kable_classic_2(full_width = F, html_font = "Cambria") %>%
 add_header_above(font_size = 16, bold = TRUE, c("Variability Information" = 2), background = "lightgray") %>%
 row_spec(0, bold = TRUE)
-
-proportion_variability <- 1 - (residuals / response)
-
-proportion_variability
 ```
+
+### Description of Model Fit
+
 The variance (the distribution of a set of data points) of the response values showcases how average_emission varies 45.10085 per capita over time. The variance of the fitted values highlights how much the values predicted by the model are distributed with a variation of 34.15482. The variance of the residuals describes the spread of the difference between the observed values and their corresponding fitted values. This discusses the variability the model doesn't account for which is 10.94603.
 
-75.73% of the variation in average CO2 emissions is explained by the linear regression model, using average income per capita as the predictor variable. This R-squared shows that our model is of reasonable quality, as it shows a good amount of correlation. Ideally we would have an R-squared value even higher (0.9 to 0.95) in order to make precise predictions, but our value of 0.75 is likely enough to establish correlation between average income per capita and CO2 emissions.
+$$ 1 - \frac{residual\_variability}{response\_variability} = 1 - \frac{10.95}{45.10} = 0.7573$$
 
-#3. Simulation
-##3.1 Visualizing Simulations from the Model
+75.73% of the variation in average CO2 emissions is explained by the linear regression model, using average income per capita as the predictor variable. This $R^2$ value shows that our model is of reasonable quality, as it shows a moderate amount of correlation. Ideally, our proportion would be even higher (0.9 to 0.95) in order to make precise predictions, but our value of 0.75 is likely enough to establish correlation between average income per capita and CO2 emissions.
 
-# MAKE SURE TO CITE CODE!
+# Simulation
+
+By using our linear regression equation, we can predict values that were not directly
+collected in the dataset. This can be done by plugging in a value for $average\_income$
+in our regression equation, which would result in a theoretical $average\_emission$ value.
+Following from this, we can create a simulated dataset with each value calculated entirely
+from our regression model. To account for the fact that not every value falls precisely on
+the regression line, we add a random, normally-distributed amount of noise to each data point
+that matches our original dataset.
+
+## Visualizing Simulated Data
+
 ```{r}
 noise <- function(x, mean = 0, sd){
   x + rnorm(length(x), 
@@ -230,10 +267,6 @@ noise <- function(x, mean = 0, sd){
 }
 
 sim_response <- tibble(sim_average_emissions = noise(predict(model), sd = sigma(model)))
-```
-
-```{r}
-linear_data
 ```
 
 ```{r}
@@ -285,8 +318,7 @@ sim_reg <- sim_data %>%
 
 obs_reg + sim_reg
 ```
-From the plots above, we can see that the actual data and simulated data both have positive, linear correlations. However, the actual data appears to have a fan shape, where the points near the origin are clustered very close together, and then as the x-value increases the points spread out. Comparatively, the simulated data clusters upward towards the y-axis from about 5-10 million tonnes of CO2, and is a thicker, more consistent cluster of points as a whole rather than a fan shape. There are several reasons why the points differ. In order to create the simulated CO2 values, R uses our regression equation within our model to predict CO2 emission values based on specific x values. Because it is not realistic for all of these points to lie exactly on the regression line, we added some noise to the points randomly and join the simulated data with our original data set.  
-
+From the plots above, we can see that the actual data and simulated data both have positive, linear correlations. However, the actual data appears to have a fan shape, where the points near the origin are clustered very close together, and then as the x-value increases the points spread out. Comparatively, the simulated data clusters upward towards the y-axis from about 5-10 million tonnes of CO2, and is a thicker, more consistent cluster of points as a whole rather than a fan shape. This is because the noise we added in our simulated dataset is normally distributed and uniform accross all incomes, while it is clear that the randomness of our observed dataset incomes scale linearly with income (as income increases, the "range" of random variation increases). This also explains why our average emissions are more normally-distributed as opposed to being extremely right-skewed as shown in the first visualizations.
 
 ```{r}
 sim_data %>% 
@@ -305,29 +337,32 @@ sim_data %>%
   theme_bw()
 ```
 
-This graph displays our simulated emissions data against our observed data. The
+This graph displays our simulated emissions data against our observed data. The dashed
 line at $y = x$ represents an exact match between the two datasets. It is visible that
 the two datasets follow the slope of our fitting line. However, this graph also presents
-a difference between the two datasets. The simulated dataset has the same amount of noise
-regardless of the emission amount, while our observed data has less noise when values are low,
+a difference between the two datasets. As discussed above, the simulated dataset has the same amount of noise
+regardless of the income amount (and thereby emission amount), while our observed data has less noise when values are low,
 and more when they are high. This is displayed in that low emission values are vertically dense
-in the observed data, and horizontally spread out in the simulated data.
+(in the observed data), and horizontally spread out (in the simulated data).
+
+## Generating Multiple Predictive Checks
+
+In order to test our linear regression model, we can generate multiple simulated datasets,
+regress this new data on our observed data, and look at the $R^2$ value from this regression.
+
+Below is a plot of the distribution of $R^2$ values from 1500 simulated datasets.
 
 ```{r}
-lm(average_emission ~ sim_average_emissions, 
-   data = sim_data
-   ) %>% 
-  glance() 
-
 sim_r2 <- lm(average_emission ~ sim_average_emissions, 
              data = sim_data
              ) %>% 
   glance() %>% 
   select(r.squared) %>% 
   pull()
-sim_r2
 ```
-##3.2 Generating Multiple Predictive Checks
+
+
+
 ```{r}
 nsims <- 1500
 sims <- map_dfc(.x = 1:nsims,
@@ -350,8 +385,6 @@ sim_r_sq <- sims %>%
   map(~ lm(average_emission ~ .x, data = sims)) %>% 
   map(glance) %>% 
   map_dbl(~ .x$r.squared)
-
-head(sim_r_sq)
 ```
 
 ```{r}
@@ -365,6 +398,10 @@ tibble(sims = sim_r_sq) %>%
        subtitle = "Number of Simulated Models") +
   theme_bw()
 ```
+
+In this plot, we see that the simulated datsets have $R^2$ values between 0.45 and 0.7. This indicates that the simulated
+data is moderately similar to our observed data. On average, our simulated data accounts for around 56.1% of the variability
+in the observed data set.
 
 # Works Cited
 
