@@ -43,11 +43,11 @@ The income dataset contains information regarding each country's average daily h
 
 The CO2 data set describes the consumption based CO2 emissions in million tonnes of CO2 per capita. These values are based on the Global Carbon Project 2021. On Gapminder, this dataset is titled "CO2 emissions per capita (Consumption based)".
 
-*Note: This is all of the information available for this dataset on Gapminder.*
+*Note: This is all of the available information for this dataset on Gapminder.*
 
 ## Hypothesis
 
-According to additional [research](https://www.cgdev.org/media/who-caused-climate-change-historically#:~:text=Developed%20Countries%20Are%20Responsible%20for,Global%20Development%20%7C%20Ideas%20to%20Action), we anticipate that more economically developed countries (those with higher average daily incomes per capita) will be correlated with higher average CO2 emissions compared to countries with lower average daily incomes per capita.
+According to additional [research](https://www.cgdev.org/media/who-caused-climate-change-historically#:~:text=Developed%20Countries%20Are%20Responsible%20for,Global%20Development%20%7C%20Ideas%20to%20Action), we anticipate that more economically developed countries (those with higher average daily incomes per capita) will be correlated with higher average CO2 emissions compared to countries with lower average daily incomes per capita (Center for Global Development).
 
 ## Data Cleaning
 
@@ -185,10 +185,11 @@ anim_plot <- merged_data %>%
 
 animate(anim_plot, renderer = magick_renderer())
 ```
+From the animated visualization, we can see that as the year increases, the points become more variable. In the earlier years (1800 until about 1950) the points mainly remain clustered close to 0. However, as the animation progresses to 1950 and beyond, there are far more points, which are also much more spread out We see the fan shape of the data extend to exponentially larger average income per capita and average CO2 emission per capita values. There are several explanations for this, but the majority of our research attributes the pattern to and increase in fossil fuel burning for electricity and steel, along with oil for vehicles and manufacturing and technology skyrocketed (NOAA).
 
 ## Linear Regression Model
 
-Linear regression is a technique for modelling the relationship between two statistical variables (average daily income and average CO2 emissions per capita). It assumes that there is a linear relationship between these variables, and by calculating their mathematical relationship, we can gain insight on how these variables are related as well as make predictions. For this dataset, we make a linear regression model with our explanatory variable as average daily income per capita, and our response variable average carbon dioxide emissions. This will give us information that will test our hypothesis as well as allow us to predict emission levels given income.
+Linear regression is a technique for modelling the relationship between two statistical variables (average daily income per capita and average CO2 emissions per capita). It assumes that there is a linear relationship between these variables, and by calculating their mathematical relationship, we can gain insight on how these variables are related as well as how to make predictions. For this dataset, we developed a linear regression model with our explanatory variable as average daily income per capita, and our response variable as average carbon dioxide emissions per capita. This will provide us with valuable information that will test our hypothesis as well as allow us to predict emission levels for given income levels.
 
 For wrangling our data to use for the linear regression model, we decided to summarize our data so we have one x and y value for each country. However, due to the increase in both emissions and income in recent decades, we decided to take the average from 1990 to 2020. We also considered making several intervals of 30 years to increase our data availability, but decided that ultimately pulling data from more recent years in which emissions increased significantly would be the most insightful.
 
@@ -207,9 +208,9 @@ linear_data %>%
   ggplot(mapping = aes(x = average_income, y = average_emission)) +
   geom_point() +
   geom_smooth(method = "lm", se = FALSE) +
-  labs(x = "Average Income (Per Capita)", y = "", subtitle = "Average CO2 Emission (Per Capita)", title = "Linear Regression of Average Income and Average CO2 Per Capita")
+  labs(x = "Average Income (Constant International Dollars Per Capita)", y = "", subtitle = "Average CO2 Emission (Per Capita)", title = "Linear Regression of Average Income and Average CO2 Per Capita")
 ```
-This graph demonstrates the linear regression for average income per capita (explanatory), and average CO2 emissions per capita (response) from data timing across the years 1990-2020. Each country has an average income and emission value over the entirety of the 30 years, which is the time frame that contains the most recent and reliable numeric values. From the graph, we can see that our line of best fit using the ordinary least squares (OLS) closely follows the data points for the majority of our data 
+This graph demonstrates the linear regression for average income per capita (explanatory), and average CO2 emissions per capita (response) from data timing across the years 1990-2020. Each country has an average income and emission value over the entirety of the 30 years, which is the time frame that contains the most recent and reliable numeric values. From the graph, we can see that our line of best fit using the ordinary least squares (OLS) closely follows the data points for the majority of our data. However, we can see that the points become more variable as they move away from the origin, which could affect the accuracy of our predictions.
 
 ### Model Interpretation
 
@@ -241,11 +242,11 @@ row_spec(0, bold = TRUE)
 
 ### Description of Model Fit
 
-The variance (the distribution of a set of data points) of the response values showcases how average_emission varies 45.10085 per capita over time. The variance of the fitted values highlights how much the values predicted by the model are distributed with a variation of 34.15482. The variance of the residuals describes the spread of the difference between the observed values and their corresponding fitted values. This discusses the variability the model doesn't account for which is 10.94603.
+The variance (the distribution of a set of data points) of the response values showcases how average emission varies 45.10085 per capita over time. The variance of the fitted values highlights how much the values predicted by the model are distributed, resulting in a variation of 34.15482. The variance of the residuals describes the spread of the difference between the observed values and their corresponding fitted values. This discusses the variability the model doesn't account for, which is 10.94603.
 
 $$ 1 - \frac{residual\_variability}{response\_variability} = 1 - \frac{10.95}{45.10} = 0.7573$$
 
-75.73% of the variation in average CO2 emissions is explained by the linear regression model, using average income per capita as the predictor variable. This $R^2$ value shows that our model is of reasonable quality, as it shows a moderate amount of correlation. Ideally, our proportion would be even higher (0.9 to 0.95) in order to make precise predictions, but our value of 0.75 is likely enough to establish correlation between average income per capita and CO2 emissions.
+75.73% of the variation in average CO2 emissions per capita is explained by the linear regression model, using average income per capita as the predictor variable. This $R^2$ value shows that our model is of reasonable quality, as it shows a moderate amount of correlation. Ideally, our proportion would be even higher (0.9 to 0.95) in order to make precise predictions, but our value of 0.75 is likely enough to establish a positive correlation between average income per capita and average CO2 emissions per capita.
 
 # Simulation
 
@@ -302,7 +303,7 @@ obs_reg <- sim_data %>%
   labs(title = "Average Income vs Average CO2 Emission",
        x = "Average Income (PPP)",
        y = "",
-       subtitle = "Average CO2 Emission (million tonnes") +
+       subtitle = "Average CO2 Emission (mt)") +
   theme_bw()
 
 sim_reg <- sim_data %>%
@@ -313,12 +314,12 @@ sim_reg <- sim_data %>%
    labs(title = "Average Income vs Simulated C02 Emission",
        x = "Average Income (PPP)",
        y = "",
-       subtitle = "Simulated CO2 Emission") +
+       subtitle = "Simulated Average CO2 Emission (mt)") +
   theme_bw()
 
 obs_reg + sim_reg
 ```
-From the plots above, we can see that the actual data and simulated data both have positive, linear correlations. However, the actual data appears to have a fan shape, where the points near the origin are clustered very close together, and then as the x-value increases the points spread out. Comparatively, the simulated data clusters upward towards the y-axis from about 5-10 million tonnes of CO2, and is a thicker, more consistent cluster of points as a whole rather than a fan shape. This is because the noise we added in our simulated dataset is normally distributed and uniform accross all incomes, while it is clear that the randomness of our observed dataset incomes scale linearly with income (as income increases, the "range" of random variation increases). This also explains why our average emissions are more normally-distributed as opposed to being extremely right-skewed as shown in the first visualizations.
+From the plots above, we can see that the actual data and simulated data both have positive, somewhat linear correlations. However, the actual data appears to have a fan shape, where the points near the origin are clustered very close together, and then as the x-value increases the points spread out. Comparatively, the simulated data clusters upward towards the y-axis from about 5-10 million tonnes of CO2, and is a thicker, more consistent cluster of points as a whole rather than a fan shape. This is because the noise we added in our simulated dataset is normally distributed and uniform across all incomes, while it is clear that the randomness of our observed dataset incomes scale linearly with income (as income increases, the "range" of random variation increases). This also explains why our average emissions are more normally-distributed as opposed to being extremely right-skewed as shown in the first visualizations.
 
 ```{r}
 sim_data %>% 
@@ -395,7 +396,7 @@ tibble(sims = sim_r_sq) %>%
   geom_histogram(binwidth = 0.025) +
   labs(x = expression("Simulated"~ R^2),
        y = "",
-       subtitle = "Number of Simulated Models") +
+       subtitle = "Number of Simulated Models", title = expression("Distribution of Simulated " ~ R^2 ~ " Values")) +
   theme_bw()
 ```
 
@@ -408,6 +409,8 @@ in the observed data set.
 “A Grammar of Animated Graphics.” A Grammar of Animated Graphics •, gganimate.com/. Accessed 7 June 2023. 
 
 “‘Average Daily Income per Capita, PPP (Constant 2011 International $)’,‘CO2 Emissions Per Capita (Consumption Based).’” Gapminder, www.gapminder.org/data/. Accessed 7 June 2023. 
+
+“Carbon Dioxide Levels Race Past Troubling Milestone.” National Oceanic and Atmospheric Administration, www.noaa.gov/stories/carbon-dioxide-levels-race-past-troubling-milestone#:~:text=That%20all%20changed%20starting%20in,being%20pumped%20into%20the%20atmosphere. Accessed 12 June 2023. 
 
 “Developed Countries Are Responsible for 79 Percent of Historical Carbon Emissions.” Center For Global Development | Ideas to Action, www.cgdev.org/media/who-caused-climate-change-historically#:~:text=Developed%20Countries%20Are%20Responsible%20for,Global%20Development%20%7C%20Ideas%20to%20Action. Accessed 7 June 2023. 
 
