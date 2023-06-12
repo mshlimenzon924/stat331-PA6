@@ -156,9 +156,9 @@ merged_data %>%
 ```
 
 
-The varying width of intervals on the x-axis for years is a result of missing values. Each country has an x and y value for each year theoretically, but if there are missing values, which are filtered out, then the amount of values to plot decreases for that given year, resulting in slightly different widths on the x-axis.
+In the above graph, we have displayed average income per capita vs emissions per capita for six different years: 1920, 1940, 1960, 1980, 2000, and 2020. We Included these intervals and faceted each graph so that the evolution of the relationship between income and relationship can be more easily seen. The interval of 1920 - 2020 was used due to the higher quantity of data (emissions and income). We used six different years specifically because we felt it gave the most clear and easy to visualize comparison between different time periods. 
 
-Furthermore, the relationship between average income per capita vs emissions over time is shown above. There appears to be a positive correlation between income and CO2 emissions. Graphically, we can see that countries with lower average incomes per capita (closer to 0) are lower on the emission scale (blue), whereas the higher emissions are correlated with countries with higher incomes (red/pink). Also, over time, average income per capita has dramatically increased overall. There is a spike in emissions around the 50's through 70's, this could be due to less regulation and the post-war economy.
+There appears to be a positive correlation between income and CO2 emissions. Over time, average income per capita has dramatically increased. Since 1960 there appears to be a stronger linear relationship between each variable, with an increase in both income and emissions per capita.  
 
 
 ## Linear Regression Model
