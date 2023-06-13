@@ -1,5 +1,5 @@
 ---
-title: "Final Project"
+title: "Final Report"
 author: "Stolie Erickson, Mira Shlimenzon, Joseph Konat, Casey Avila"
 format: 
   html:
@@ -29,7 +29,15 @@ ipp <- read_csv("ipp.csv")
 options(scipen = 999)
 ```
 
-# Project Proposal and Data
+# Analyzing the relationship between Average Daily Income Per Capita and Average CO2 Emissions Per Capita.
+
+
+![](GeographicalRegion)
+
+![Source: Washington Post](Emissions) 
+
+
+In this report, we will analyze the relationship between average daily income per capita and average CO2 emissions per capita. As technology continues to evolve and countries engage in trade to minimize their opportunity costs, CO2 emissions have skyrocketed in recent years. With the importance and prevalence of managing climate change and the influence that CO2 emissions have over its progression, we hope to find a link between these variables in order to obtain information regarding alternative explanations for the rise in carbon emissions.
 
 ## Data Description
 
@@ -404,6 +412,9 @@ In this plot, we see that the simulated datsets have $R^2$ values between 0.45 a
 data is moderately similar to our observed data. On average, our simulated data accounts for around 56.1% of the variability
 in the observed data set.
 
+# Conclusion
+Throughout our research, along with development of several visualizations, we can conclude that there is a clear positive relationship between average daily income per capita and average CO2 emissions per capita. Most notably, our linear regression proved that average daily income per capita is a significant predictor (p-value <.000) for average CO2 emissions per capita. The data we investigated was for countries around the world, over several different time frames. Ultimately, performing a multiple regression and introducing alternative explanatory variables could provide additional insight on factors that might have a higher correlation and direct influence over CO2 emissions per capita.
+
 # Works Cited
 
 “A Grammar of Animated Graphics.” A Grammar of Animated Graphics •, gganimate.com/. Accessed 7 June 2023. 
@@ -413,5 +424,9 @@ in the observed data set.
 “Carbon Dioxide Levels Race Past Troubling Milestone.” National Oceanic and Atmospheric Administration, www.noaa.gov/stories/carbon-dioxide-levels-race-past-troubling-milestone#:~:text=That%20all%20changed%20starting%20in,being%20pumped%20into%20the%20atmosphere. Accessed 12 June 2023. 
 
 “Developed Countries Are Responsible for 79 Percent of Historical Carbon Emissions.” Center For Global Development | Ideas to Action, www.cgdev.org/media/who-caused-climate-change-historically#:~:text=Developed%20Countries%20Are%20Responsible%20for,Global%20Development%20%7C%20Ideas%20to%20Action. Accessed 7 June 2023. 
+
+Mufson, Steven. “Coronavirus Is Driving down Global Carbon Dioxide Emissions to Levels Last Seen 10 Years Ago, Agency Says.” The Washington Post, 30 Apr. 2020, www.washingtonpost.com/climate-environment/2020/04/30/coronavirus-is-driving-down-global-carbon-dioxide-emissions-levels-last-seen-10-years-ago-agency-says/. 
+
+Ritchie, Hannah, et al. “CO2 Emissions.” Our World in Data, 11 May 2020, ourworldindata.org/co2-emissions. 
 
 “10&nbsp; Predictive Checks.” Stat 331/531 Statistical Computing with R - 10&nbsp; Predictive Checks, earobinson95.github.io/stat331-calpoly-text/10-predictive-checks.html#ch10-checkins. Accessed 7 June 2023. 
