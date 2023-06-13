@@ -29,11 +29,10 @@ ipp <- read_csv("ipp.csv")
 options(scipen = 999)
 ```
 
-# Analyzing the relationship between Average Daily Income Per Capita and Average CO2 Emissions Per Capita.
+# Analyzing the Relationship Between Average Daily Income Per Capita and Average CO2 Emissions Per Capita.
 
 
-![](GeographicalRegion)
-
+![](GeographicalRegion) 
 ![Source: Washington Post](Emissions) 
 
 
@@ -152,7 +151,7 @@ merged_data <- inner_join(co2_long, ipp_long, by = c("country", "year")) %>%
 merged_data %>%
   ggplot(mapping = aes(x = average_income_per_capita, y = emissions)) +
   geom_point(alpha = 0.3, color = "steelblue") +
-  labs(x = "Average Income Per Capita (PPP)", y = "",
+  labs(x = "Average Daily Income Per Capita (PPP)", y = "",
        title = "Relationship between Average Income and CO2 Emissions Per Capita",
        subtitle = "CO2 Emissions Per Capita (million tonnes)")
 ```
@@ -165,8 +164,8 @@ merged_data %>%
   filter(year %in% c(1920, 1940, 1960, 1980, 2000, 2020)) %>%
   mutate(year = as.factor(year)) %>%
   ggplot(mapping = aes(x = average_income_per_capita, y = emissions)) +
-  geom_point(alpha = .3, color = "purple") +
-  labs(x = "Average Income per Capita", y = "",
+  geom_point(alpha = .3, color = "steelblue") +
+  labs(x = "Average Daily Income per Capita", y = "",
        title = "Relationship between Average Income and CO2 Emissions\nPer Capita Every 20 years",
        subtitle = "Emissions per Capita (million tonnes)") +
   facet_wrap(~year)
@@ -186,7 +185,7 @@ clearly showing the increase both average daily income and CO2 emissions over ti
 anim_plot <- merged_data %>%
   ggplot(mapping = aes(x = average_income_per_capita, y = emissions)) +
   geom_point(alpha = 0.3, color = "steelblue") +
-  labs(x = "Average Income Per Capita (PPP)", y = "",
+  labs(x = "Average Daily Income Per Capita (PPP)", y = "",
        title = "Relationship between Average Income and CO2 Emissions Per Capita\nin {frame_time}",
        subtitle = "CO2 Emissions Per Capita (million tonnes)") +
   transition_time(as.integer(year))
@@ -223,7 +222,7 @@ This graph demonstrates the linear regression for average income per capita (exp
 ### Model Interpretation
 
 $$average\_emission = 0.505 + 0.278*average\_income$$
-Where $average\_emission$ is the emissions per capita of a country, measured in millions of tonnes of CO2, and $average\_income$ is the average income per capita in constant international dollars.
+Where $average\_emission$ is the emissions per capita of a country, measured in millions of tonnes of CO2, and $average\_income$ is the average daily income per capita in constant international dollars.
 
 Interpretation of the Intercept: For countries with an average income per capita of 0 constant international dollars, the estimated CO2 emissions per capita is .505 million tonnes.
 
@@ -281,7 +280,7 @@ sim_response <- tibble(sim_average_emissions = noise(predict(model), sd = sigma(
 ```{r}
 obs_p <- linear_data %>%
   ggplot(aes(x = average_emission)) +
-  geom_histogram() +
+  geom_histogram(fill = "steelblue") +
   labs(x = "Average Emissions",
        y = "",
        subtitle = "Count") +
@@ -289,7 +288,7 @@ obs_p <- linear_data %>%
 
 new_p <- sim_response %>%
   ggplot(aes(x = sim_average_emissions)) +
-  geom_histogram() +
+  geom_histogram(fill = "steelblue") +
   labs(x = "Simulated Average Emissions",
        y = "",
        subtitle = "Count") +
@@ -307,8 +306,8 @@ sim_data <- linear_data %>%
 obs_reg <- sim_data %>%
   ggplot(aes(y = average_emission,
              x = average_income)) +
-  geom_point() +
-  labs(title = "Average Income vs Average CO2 Emission",
+  geom_point(color = "darkblue") +
+  labs(title = "Average Income vs Average CO2 \nEmission",
        x = "Average Income (PPP)",
        y = "",
        subtitle = "Average CO2 Emission (mt)") +
@@ -318,8 +317,8 @@ sim_reg <- sim_data %>%
   ggplot(aes(y = sim_average_emissions,
              x = average_income)
          ) +
-  geom_point() +
-   labs(title = "Average Income vs Simulated C02 Emission",
+  geom_point(color = "darkblue") +
+   labs(title = "Average Income vs Simulated CO2 \nEmission",
        x = "Average Income (PPP)",
        y = "",
        subtitle = "Simulated Average CO2 Emission (mt)") +
@@ -401,7 +400,7 @@ sim_r_sq <- sim_r_sq[names(sim_r_sq) != "average_emission"]
 
 tibble(sims = sim_r_sq) %>% 
   ggplot(aes(x = sims)) + 
-  geom_histogram(binwidth = 0.025) +
+  geom_histogram(binwidth = 0.025, fill = "steelblue") +
   labs(x = expression("Simulated"~ R^2),
        y = "",
        subtitle = "Number of Simulated Models", title = expression("Distribution of Simulated " ~ R^2 ~ " Values")) +
